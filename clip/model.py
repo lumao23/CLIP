@@ -233,6 +233,7 @@ class VisionTransformer(nn.Module):
         x = x.permute(1, 0, 2)  # LND -> NLD
 
         # transform the cls tokens to cls + patches tokens
+        # x = x = self.ln_post(x[:,0,:])
         x = self.ln_post(x)
 
         if self.proj is not None:
