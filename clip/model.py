@@ -232,7 +232,8 @@ class VisionTransformer(nn.Module):
         x = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
 
-        x = self.ln_post(x[:, 0, :])
+        # transform the cls tokens to cls + patches tokens
+        x = self.ln_post(x)
 
         if self.proj is not None:
             x = x @ self.proj
@@ -356,7 +357,7 @@ class CLIP(nn.Module):
         return x
 
     def forward(self, image, text):
-        image_features = self.encode_image(image)
+        image_features = self.encode_image(image)[:,0,:]
         text_features = self.encode_text(text)
 
         # normalized features
